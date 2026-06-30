@@ -13,36 +13,18 @@
         window.VTS_WASM_URL = 'wechat_files/wasm_video_decode.wasm';
         window.MAX_HEAP_SIZE = 33554432;
 
-        // 备选微信 CDN 路径（如果本地加载失败）
-        window.VTS_WASM_CDN_URL = "https://aladin.wxqcloud.qq.com/aladin/ffmepeg/video-decode/1.2.46/wasm_video_decode.wasm";
         window.WASM_USING_CDN = false;
         window.WASM_LOAD_FAILED = false;
 
         // 定义错误处理函数（必须在使用前定义）
         function handleWasmScriptError() {
-            console.warn('本地 WASM JS 加载失败，切换到微信 CDN...');
-            window.WASM_USING_CDN = true;
-
-            // 尝试加载微信 CDN
-            const cdnScript = document.createElement('script');
-            cdnScript.src = 'https://aladin.wxqcloud.qq.com/aladin/ffmepeg/video-decode/1.2.46/wasm_video_decode.js';
-            cdnScript.onerror = function() {
-                console.error('微信 CDN WASM JS 也加载失败');
-                window.WASM_LOAD_FAILED = true;
-            };
-            document.head.appendChild(cdnScript);
-
-            // 更新 WASM URL 为 CDN 路径
-            window.VTS_WASM_URL = window.VTS_WASM_CDN_URL;
+            console.error('本地 WASM JS 加载失败，已禁用远程 fallback');
+            window.WASM_LOAD_FAILED = true;
         }
 
         // 页面加载完成后记录状态
         window.addEventListener('DOMContentLoaded', function() {
-            if (window.WASM_USING_CDN) {
-                console.log('使用微信 CDN 加载 WASM 模块');
-            } else {
-                console.log('使用本地文件加载 WASM 模块');
-            }
+            console.log('使用本地文件加载 WASM 模块');
         });
     </script>
 
