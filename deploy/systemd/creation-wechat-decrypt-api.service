@@ -1,5 +1,5 @@
 # WeChat Channels Video Decryption API systemd unit.
-# Copy to /etc/systemd/system/wechat-decrypt-api.service and adjust paths if needed.
+# Copy to /etc/systemd/system/creation-wechat-decrypt-api.service and adjust paths if needed.
 
 [Unit]
 Description=WeChat Channels Video Decryption API
@@ -9,9 +9,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-User=wechat-decrypt
-Group=wechat-decrypt
-WorkingDirectory=/opt/wechat-channels-video-file-decryption/api-service
+WorkingDirectory=/data/WeChat-Channels-Video-File-Decryption/api-service
 
 Environment=NODE_ENV=production
 Environment=PORT=3000
