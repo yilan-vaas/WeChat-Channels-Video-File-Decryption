@@ -1,0 +1,57 @@
+# WeChat Channels Video Decryption API systemd unit.
+# Copy to /etc/systemd/system/wechat-decrypt-api.service and adjust paths if needed.
+
+[Unit]
+Description=WeChat Channels Video Decryption API
+Documentation=https://github.com/Evil0ctal/WeChat-Channels-Video-File-Decryption
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=wechat-decrypt
+Group=wechat-decrypt
+WorkingDirectory=/opt/wechat-channels-video-file-decryption/api-service
+
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=POOL_SIZE=1
+Environment=KEYSTREAM_CACHE_MAX=100
+Environment=HOME=/var/lib/wechat-decrypt-api
+Environment=PLAYWRIGHT_BROWSERS_PATH=/var/cache/wechat-decrypt-api/ms-playwright
+EnvironmentFile=-/etc/wechat-decrypt-api/wechat-decrypt-api.env
+
+ExecStart=/usr/bin/pnpm start
+KillSignal=SIGTERM
+Restart=on-failure
+RestartSec=5s
+TimeoutStartSec=90s
+TimeoutStopSec=30s
+
+StateDirectory=wechat-decrypt-api
+CacheDirectory=wechat-decrypt-api
+LogsDirectory=wechat-decrypt-api
+StateDirectoryMode=0700
+CacheDirectoryMode=0700
+LogsDirectoryMode=0700
+UMask=0077
+LimitNOFILE=65535
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+SystemCallArchitectures=native
+CapabilityBoundingSet=
+
+# The API currently listens on all interfaces. Restrict exposure with firewall
+# rules, reverse proxy ACLs, or systemd IPAddressDeny/IPAddressAllow.
+
+[Install]
+WantedBy=multi-user.target
